@@ -1,0 +1,40 @@
+import { Routes, Route, Navigate } from 'react-router-dom';
+import { supabase } from '../lib/supabase';
+
+function GeneralStub() {
+  return (
+    <div className="bg-white rounded-lg p-6 border-l-4" style={{ borderLeftColor: '#7B9472' }}>
+      <h2 className="text-lg font-medium mb-2" style={{ color: '#9B5E45' }}>
+        AdminGeneralDashboard 결
+      </h2>
+      <p className="text-sm text-stone-600">
+        Phase 4에서 박을 결 — AI 보고 대시보드, B 동의자 사용자 결, 자원 매칭 결.
+      </p>
+    </div>
+  );
+}
+
+export default function AdminGeneralDashboard({ profile }) {
+  const handleLogout = () => supabase.auth.signOut();
+
+  return (
+    <div className="min-h-screen" style={{ backgroundColor: '#FAF7F2' }}>
+      <header className="border-b border-stone-200 bg-white px-6 py-4 flex justify-between items-center">
+        <div>
+          <h1 className="font-semibold" style={{ color: '#9B5E45' }}>오롯 — 일반 운영자</h1>
+          <p className="text-xs text-stone-500">{profile.nickname}</p>
+        </div>
+        <button onClick={handleLogout} className="text-sm text-stone-600 hover:text-stone-900">
+          로그아웃
+        </button>
+      </header>
+
+      <main className="px-6 py-8 max-w-4xl mx-auto">
+        <Routes>
+          <Route index element={<GeneralStub />} />
+          <Route path="*" element={<Navigate to="/admin_general" replace />} />
+        </Routes>
+      </main>
+    </div>
+  );
+}
