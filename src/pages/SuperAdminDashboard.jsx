@@ -3,10 +3,12 @@ import { supabase } from '../lib/supabase';
 import AdminManagement from './super_admin/AdminManagement';
 import Users from './super_admin/Users';
 import UserDetail from './super_admin/UserDetail';
+import Registrations from './super_admin/Registrations';
 import StatsStub from './super_admin/StatsStub';
 
 const TABS = [
   { to: '/super_admin/admins', label: 'admin 관리' },
+  { to: '/super_admin/registrations', label: '발급번호' },
   { to: '/super_admin/users', label: '사용자' },
   { to: '/super_admin/stats', label: '통계' },
 ];
@@ -54,6 +56,7 @@ export default function SuperAdminDashboard({ profile }) {
         <Routes>
           <Route index element={<Navigate to="admins" replace />} />
           <Route path="admins" element={<AdminManagement />} />
+          <Route path="registrations" element={<Registrations />} />
           <Route path="users" element={<Users />} />
           <Route path="users/:userId" element={<UserDetail />} />
           <Route path="stats" element={<StatsStub />} />
