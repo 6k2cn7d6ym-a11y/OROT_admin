@@ -86,10 +86,10 @@ export default function Users() {
       )}
 
       {loading ? (
-        <p className="text-sm text-stone-500">로딩 결...</p>
+        <p className="text-sm text-stone-500">로딩 중...</p>
       ) : users.length === 0 ? (
         <div className="bg-white rounded-lg p-6 border border-stone-200 text-sm text-stone-500">
-          B 동의자 결 X
+          B 동의자 없음
         </div>
       ) : (
         <div className="bg-white rounded-lg border border-stone-200 overflow-hidden">

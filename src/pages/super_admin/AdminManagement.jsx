@@ -56,7 +56,7 @@ export default function AdminManagement() {
       )}
 
       {loading ? (
-        <p className="text-sm text-stone-500">로딩 결...</p>
+        <p className="text-sm text-stone-500">로딩 중...</p>
       ) : admins.length === 0 ? (
         <p className="text-sm text-stone-500">박힌 admin X</p>
       ) : (

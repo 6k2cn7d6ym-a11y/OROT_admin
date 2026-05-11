@@ -18,11 +18,13 @@ export default function App() {
       if (!session) setLoading(false);
     });
 
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, newSession) => {
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, newSession) => {
       setSession(newSession);
       if (!newSession) {
         setProfile(null);
         setLoading(false);
+      } else if (event === 'SIGNED_IN') {
+        setLoading(true);
       }
     });
 
@@ -34,7 +36,7 @@ export default function App() {
     setLoading(true);
     supabase
       .from('profiles')
-      .select('role, admin_type, nickname, assigned_gu, clinical_role')
+      .select('id, role, admin_type, nickname, assigned_gu, clinical_role')
       .eq('id', session.user.id)
       .single()
       .then(({ data, error }) => {
@@ -51,7 +53,7 @@ export default function App() {
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center" style={{ backgroundColor: '#FAF7F2' }}>
-        <p style={{ color: '#9B5E45' }}>로딩 결...</p>
+        <p style={{ color: '#9B5E45' }}>로딩 중...</p>
       </div>
     );
   }
@@ -75,7 +77,14 @@ export default function App() {
           path="/login"
           element={!session ? <Login /> : <Navigate to={defaultRoute} replace />}
         />
-        <Route path="/forbidden" element={<Forbidden />} />
+        <Route
+          path="/forbidden"
+          element={
+            session && !isSuperAdmin && !isAdminGeneral && !isAdminDistrict
+              ? <Forbidden />
+              : <Navigate to={defaultRoute} replace />
+          }
+        />
         <Route
           path="/super_admin/*"
           element={

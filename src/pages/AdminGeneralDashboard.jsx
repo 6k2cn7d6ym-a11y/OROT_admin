@@ -5,10 +5,10 @@ function GeneralStub() {
   return (
     <div className="bg-white rounded-lg p-6 border-l-4" style={{ borderLeftColor: '#7B9472' }}>
       <h2 className="text-lg font-medium mb-2" style={{ color: '#9B5E45' }}>
-        AdminGeneralDashboard 결
+        AdminGeneralDashboard
       </h2>
       <p className="text-sm text-stone-600">
-        Phase 4에서 박을 결 — AI 보고 대시보드, B 동의자 사용자 결, 자원 매칭 결.
+        Phase 4에서 박을 거 — AI 보고 대시보드, B 동의자 사용자, 자원 매칭.
       </p>
     </div>
   );

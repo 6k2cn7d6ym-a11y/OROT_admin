@@ -17,7 +17,7 @@ export default function Login() {
     if (signInError) {
       setError(
         signInError.message === 'Invalid login credentials'
-          ? '이메일 또는 비밀번호 결 다시 확인해줘'
+          ? '이메일 또는 비밀번호를 다시 확인해주세요'
           : signInError.message
       );
       setSubmitting(false);
@@ -33,7 +33,7 @@ export default function Login() {
           <h1 className="text-2xl font-semibold mb-2" style={{ color: '#9B5E45' }}>
             오롯 운영자
           </h1>
-          <p className="text-sm text-stone-600">로그인 결</p>
+          <p className="text-sm text-stone-600">로그인</p>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-4 bg-white p-6 rounded-lg border border-stone-200">
@@ -69,7 +69,7 @@ export default function Login() {
             className="w-full py-2 rounded-md text-white font-medium disabled:opacity-50 transition-opacity"
             style={{ backgroundColor: '#9B5E45' }}
           >
-            {submitting ? '들어가는 결...' : '로그인'}
+            {submitting ? '로그인 중...' : '로그인'}
           </button>
         </form>
       </div>

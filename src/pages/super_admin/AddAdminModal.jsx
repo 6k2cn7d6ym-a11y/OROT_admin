@@ -23,11 +23,11 @@ export default function AddAdminModal({ onClose, onSaved }) {
     if (error) {
       setSearchError(error.message);
     } else if (!data || data.length === 0) {
-      setSearchError('이 이메일 결로 가입한 사용자 X');
+      setSearchError('이 이메일로 가입한 사용자 없음');
     } else {
       const user = data[0];
       if (user.role === 'admin' || user.role === 'super_admin') {
-        setSearchError('이미 admin 결인 사용자');
+        setSearchError('이미 admin인 사용자');
       } else {
         setFoundUser(user);
         setStep('configure');
@@ -76,7 +76,7 @@ export default function AddAdminModal({ onClose, onSaved }) {
                 className="w-full px-3 py-2 border border-stone-300 rounded-md focus:outline-none focus:border-stone-500"
               />
               <p className="text-xs text-stone-500 mt-1">
-                OROT_app 결로 가입한 사용자만 admin 결로 박을 수 있어
+                OROT_app으로 가입한 사용자만 admin으로 박을 수 있어
               </p>
             </div>
 

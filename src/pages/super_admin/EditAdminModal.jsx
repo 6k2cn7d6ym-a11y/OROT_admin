@@ -134,12 +134,12 @@ export default function EditAdminModal({ admin, onClose, onSaved }) {
                 onClick={() => setConfirmRemove(true)}
                 className="text-sm text-red-600 hover:text-red-800"
               >
-                admin 결 빼기
+                admin 권한 빼기
               </button>
             ) : (
               <div className="bg-red-50 border border-red-200 rounded p-3 space-y-2">
                 <p className="text-sm text-red-800">
-                  진짜 박을래? role 결 'user'로 갈음 박힘.
+                  진짜 박을래? role이 'user'로 갈아져.
                 </p>
                 <div className="flex gap-2">
                   <button

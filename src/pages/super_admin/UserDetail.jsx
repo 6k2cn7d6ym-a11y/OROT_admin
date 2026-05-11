@@ -119,7 +119,7 @@ export default function UserDetail() {
   }, [userId]);
 
   if (loading) {
-    return <div className="px-8 py-6 text-sm text-stone-500">로딩 결...</div>;
+    return <div className="px-8 py-6 text-sm text-stone-500">로딩 중...</div>;
   }
 
   if (error || !profile) {
@@ -128,7 +128,7 @@ export default function UserDetail() {
         <button onClick={() => navigate('/super_admin/users')} className="text-sm text-stone-600 hover:text-stone-900 mb-4">
           ← 사용자 목록
         </button>
-        <p className="text-sm text-red-600">{error || '사용자 결 못 찾음'}</p>
+        <p className="text-sm text-red-600">{error || '사용자를 찾을 수 없어요'}</p>
       </div>
     );
   }
@@ -183,7 +183,7 @@ export default function UserDetail() {
 
       <Section title={`매일 요약 (${dailySummaries.length}건)`}>
         {dailySummaries.length === 0 ? (
-          <p className="text-sm text-stone-500">박힌 결 X</p>
+          <p className="text-sm text-stone-500">기록 없음</p>
         ) : (
           <div className="space-y-3">
             {dailySummaries.map((s) => (
@@ -198,7 +198,7 @@ export default function UserDetail() {
 
       <Section title={`주간 요약 (${weeklySummaries.length}건)`}>
         {weeklySummaries.length === 0 ? (
-          <p className="text-sm text-stone-500">박힌 결 X</p>
+          <p className="text-sm text-stone-500">기록 없음</p>
         ) : (
           <div className="space-y-3">
             {weeklySummaries.map((s) => (
@@ -213,7 +213,7 @@ export default function UserDetail() {
 
       <Section title={`위기 이력 (${crises.length}건)`}>
         {crises.length === 0 ? (
-          <p className="text-sm text-stone-500">박힌 결 X</p>
+          <p className="text-sm text-stone-500">기록 없음</p>
         ) : (
           <div className="space-y-3">
             {crises.map((c) => (
@@ -240,7 +240,7 @@ export default function UserDetail() {
 
       <Section title="자원 카드 추천">
         <div className="border-2 border-dashed border-stone-300 rounded p-4 text-sm text-stone-500">
-          Phase 4-A 끝에 박을 결 — 자원 카드 매칭·추천.
+          Phase 4-A 끝에 박을 거 — 자원 카드 매칭·추천.
         </div>
       </Section>
     </div>
