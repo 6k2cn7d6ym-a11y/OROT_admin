@@ -2,10 +2,12 @@ import { NavLink, Routes, Route, Navigate } from 'react-router-dom';
 import { supabase } from '../lib/supabase';
 import Registrations from './admin_district/Registrations';
 import Chats from './admin_district/Chats';
+import CrisisAlerts from '../components/CrisisAlerts';
 
 const TABS = [
   { to: '/admin_district/registrations', label: '발급번호' },
   { to: '/admin_district/chats', label: '채팅' },
+  { to: '/admin_district/crisis', label: '위기 알림' },
 ];
 
 export default function AdminDistrictDashboard({ profile }) {
@@ -15,7 +17,7 @@ export default function AdminDistrictDashboard({ profile }) {
     <div className="min-h-screen flex" style={{ backgroundColor: '#FAF7F2' }}>
       <aside className="w-56 bg-white border-r border-stone-200 flex flex-col">
         <div className="px-5 py-5 border-b border-stone-200">
-          <h1 className="font-semibold" style={{ color: '#9B5E45' }}>오롯 자치구 운영자</h1>
+          <h1 className="font-semibold" style={{ color: '#9B5E45' }}>IMHERE 자치구 운영자</h1>
           <p className="text-xs text-stone-500 mt-1">
             {profile.nickname} · {profile.assigned_gu || '자치구 미지정'}
           </p>
@@ -55,6 +57,7 @@ export default function AdminDistrictDashboard({ profile }) {
           <Route index element={<Navigate to="registrations" replace />} />
           <Route path="registrations" element={<Registrations profile={profile} />} />
           <Route path="chats" element={<Chats profile={profile} />} />
+          <Route path="crisis" element={<CrisisAlerts profile={profile} isSuperAdmin={false} />} />
           <Route path="*" element={<Navigate to="registrations" replace />} />
         </Routes>
       </main>

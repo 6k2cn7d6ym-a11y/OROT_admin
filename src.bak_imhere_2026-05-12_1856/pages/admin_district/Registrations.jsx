@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
 import { supabase } from '../../lib/supabase';
-import { SEOUL_GU } from '../../lib/constants';
 import RegistrationDetailModal from '../../components/RegistrationDetailModal';
 
 const STATUS_ORDER = { pending: 0, linked: 1, inactive: 2 };
@@ -26,8 +25,9 @@ const formatDate = (iso) => {
   });
 };
 
-export default function Registrations() {
-  const [gu, setGu] = useState('');
+export default function Registrations({ profile }) {
+  const assignedGu = profile?.assigned_gu || '';
+
   const [name, setName] = useState('');
   const [phone, setPhone] = useState('');
   const [address, setAddress] = useState('');
@@ -41,12 +41,18 @@ export default function Registrations() {
   const [detail, setDetail] = useState(null);
 
   const fetchList = async () => {
+    if (!assignedGu) {
+      setRegistrations([]);
+      setLoading(false);
+      return;
+    }
     setLoading(true);
     setListError('');
 
     const { data, error } = await supabase
       .from('district_registrations')
       .select('*')
+      .eq('gu', assignedGu)
       .order('issued_at', { ascending: false });
 
     if (error) {
@@ -75,7 +81,8 @@ export default function Registrations() {
 
   useEffect(() => {
     fetchList();
-  }, []);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [assignedGu]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -83,7 +90,7 @@ export default function Registrations() {
     setSubmitting(true);
 
     const { data, error } = await supabase.rpc('create_district_registration', {
-      gu_input: gu,
+      gu_input: assignedGu,
       real_name_input: name,
       phone_input: phone,
       address_input: address,
@@ -98,12 +105,11 @@ export default function Registrations() {
     const newRow = Array.isArray(data) ? data[0] : data;
     const govId = newRow?.gov_assigned_id || '';
 
-    setGu('');
     setName('');
     setPhone('');
     setAddress('');
     setSubmitting(false);
-    alert(`발급번호 박힘: ${govId}`);
+    alert(`발급번호 발행 완료: ${govId}`);
     fetchList();
   };
 
@@ -112,6 +118,21 @@ export default function Registrations() {
     if (diff !== 0) return diff;
     return new Date(b.issued_at) - new Date(a.issued_at);
   });
+
+  // assigned_gu 없으면 안내만
+  if (!assignedGu) {
+    return (
+      <div className="px-8 py-6">
+        <div className="mb-6">
+          <h2 className="text-xl font-semibold" style={{ color: '#9B5E45' }}>발급번호</h2>
+          <p className="text-sm text-stone-600 mt-1">자치구 발급번호 발행·관리</p>
+        </div>
+        <div className="bg-white rounded-lg p-6 border border-stone-200 text-sm text-stone-600">
+          관리자가 자치구를 지정하지 않았어요. super_admin에게 문의해주세요.
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="px-8 py-6">
@@ -123,20 +144,15 @@ export default function Registrations() {
       <form onSubmit={handleSubmit} className="bg-white rounded-lg p-5 border border-stone-200 mb-6">
         <h3 className="text-sm font-semibold mb-4" style={{ color: '#9B5E45' }}>발급번호 발행</h3>
 
-        <div className="grid grid-cols-2 gap-4 mb-4">
-          <div>
-            <label className="block text-sm mb-1 text-stone-700">자치구</label>
-            <select
-              value={gu}
-              onChange={(e) => setGu(e.target.value)}
-              required
-              className="w-full px-3 py-2 border border-stone-300 rounded-md focus:outline-none focus:border-stone-500 bg-white"
-            >
-              <option value="">선택해줘</option>
-              {SEOUL_GU.map(g => <option key={g} value={g}>{g}</option>)}
-            </select>
+        <div className="mb-4">
+          <label className="block text-sm mb-1 text-stone-700">자치구</label>
+          <div className="px-3 py-2 border border-stone-200 rounded-md bg-stone-50 text-sm text-stone-700 flex items-center gap-2">
+            <span>📍 {assignedGu}</span>
+            <span className="text-xs text-stone-500">🔒 자동 지정</span>
           </div>
+        </div>
 
+        <div className="grid grid-cols-2 gap-4 mb-4">
           <div>
             <label className="block text-sm mb-1 text-stone-700">이름</label>
             <input
@@ -160,7 +176,7 @@ export default function Registrations() {
             />
           </div>
 
-          <div>
+          <div className="col-span-2">
             <label className="block text-sm mb-1 text-stone-700">주소</label>
             <input
               type="text"
@@ -197,17 +213,16 @@ export default function Registrations() {
       )}
 
       {loading ? (
-        <p className="text-sm text-stone-500">로딩 중...</p>
+        <p className="text-sm text-stone-500">불러오는 중...</p>
       ) : sorted.length === 0 ? (
         <div className="bg-white rounded-lg p-6 border border-stone-200 text-sm text-stone-500">
-          등록된 발급번호 X
+          발행된 발급번호가 없어요
         </div>
       ) : (
         <div className="bg-white rounded-lg border border-stone-200 overflow-hidden">
           <table className="w-full text-sm">
             <thead className="bg-stone-50 text-stone-600">
               <tr>
-                <th className="text-left px-4 py-3 font-medium">자치구</th>
                 <th className="text-left px-4 py-3 font-medium">발급번호</th>
                 <th className="text-left px-4 py-3 font-medium">이름</th>
                 <th className="text-left px-4 py-3 font-medium">status</th>
@@ -222,7 +237,6 @@ export default function Registrations() {
                   onClick={() => setDetail(r)}
                   className="border-t border-stone-200 hover:bg-stone-50 cursor-pointer"
                 >
-                  <td className="px-4 py-3 text-stone-700">{r.gu}</td>
                   <td className="px-4 py-3 text-stone-800 font-mono text-xs">{r.gov_assigned_id}</td>
                   <td className="px-4 py-3 text-stone-700">{r.real_name}</td>
                   <td className="px-4 py-3"><StatusBadge status={r.status} /></td>

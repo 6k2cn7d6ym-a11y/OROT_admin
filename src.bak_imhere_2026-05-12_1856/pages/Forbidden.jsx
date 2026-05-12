@@ -10,7 +10,7 @@ export default function Forbidden() {
           운영자 권한 없음
         </h1>
         <p className="text-sm text-stone-600 mb-6">
-          이 페이지는 IMHERE 운영자만 접근할 수 있어요.
+          이 페이지는 오롯 운영자만 접근할 수 있어요.
         </p>
         <button
           onClick={handleLogout}

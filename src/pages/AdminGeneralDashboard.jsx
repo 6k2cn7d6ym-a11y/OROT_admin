@@ -1,38 +1,59 @@
-import { Routes, Route, Navigate } from 'react-router-dom';
+import { NavLink, Routes, Route, Navigate } from 'react-router-dom';
 import { supabase } from '../lib/supabase';
+import CrisisAlerts from '../components/CrisisAlerts';
 
-function GeneralStub() {
-  return (
-    <div className="bg-white rounded-lg p-6 border-l-4" style={{ borderLeftColor: '#7B9472' }}>
-      <h2 className="text-lg font-medium mb-2" style={{ color: '#9B5E45' }}>
-        AdminGeneralDashboard
-      </h2>
-      <p className="text-sm text-stone-600">
-        Phase 4에서 박을 거 — AI 보고 대시보드, B 동의자 사용자, 자원 매칭.
-      </p>
-    </div>
-  );
-}
+const TABS = [
+  { to: '/admin_general/crisis', label: '위기 알림' },
+];
 
 export default function AdminGeneralDashboard({ profile }) {
   const handleLogout = () => supabase.auth.signOut();
 
   return (
-    <div className="min-h-screen" style={{ backgroundColor: '#FAF7F2' }}>
-      <header className="border-b border-stone-200 bg-white px-6 py-4 flex justify-between items-center">
-        <div>
-          <h1 className="font-semibold" style={{ color: '#9B5E45' }}>오롯 — 일반 운영자</h1>
-          <p className="text-xs text-stone-500">{profile.nickname}</p>
+    <div className="min-h-screen flex" style={{ backgroundColor: '#FAF7F2' }}>
+      <aside className="w-56 bg-white border-r border-stone-200 flex flex-col">
+        <div className="px-5 py-5 border-b border-stone-200">
+          <h1 className="font-semibold" style={{ color: '#9B5E45' }}>IMHERE 통합 운영자</h1>
+          <p className="text-xs text-stone-500 mt-1">
+            {profile.nickname} · admin_general
+          </p>
+          {profile.clinical_role && (
+            <p className="text-xs text-stone-400 mt-0.5">{profile.clinical_role}</p>
+          )}
         </div>
-        <button onClick={handleLogout} className="text-sm text-stone-600 hover:text-stone-900">
+
+        <nav className="flex-1 py-4">
+          {TABS.map(t => (
+            <NavLink
+              key={t.to}
+              to={t.to}
+              className="block w-full text-left px-5 py-2.5 text-sm transition-colors"
+              style={({ isActive }) => ({
+                backgroundColor: isActive ? '#F0EBE3' : 'transparent',
+                color: isActive ? '#9B5E45' : '#57534E',
+                borderLeft: isActive ? '3px solid #7B9472' : '3px solid transparent',
+                fontWeight: isActive ? 500 : 400,
+              })}
+            >
+              {t.label}
+            </NavLink>
+          ))}
+        </nav>
+
+        <button
+          onClick={handleLogout}
+          className="m-4 text-sm text-stone-600 hover:text-stone-900 py-2 border-t border-stone-200 pt-4"
+        >
           로그아웃
         </button>
-      </header>
+      </aside>
 
-      <main className="px-6 py-8 max-w-4xl mx-auto">
+      <main className="flex-1 overflow-auto">
         <Routes>
-          <Route index element={<GeneralStub />} />
-          <Route path="*" element={<Navigate to="/admin_general" replace />} />
+          <Route index element={<Navigate to="crisis" replace />} />
+          {/* admin_general은 자치구 무관 동의자 풀 담당이라 자치구 필터 보여줌 (isSuperAdmin=true 활용) */}
+          <Route path="crisis" element={<CrisisAlerts profile={profile} isSuperAdmin={true} />} />
+          <Route path="*" element={<Navigate to="crisis" replace />} />
         </Routes>
       </main>
     </div>

@@ -1,31 +1,27 @@
 import { NavLink, Routes, Route, Navigate } from 'react-router-dom';
 import { supabase } from '../lib/supabase';
-import AdminManagement from './super_admin/AdminManagement';
-import Users from './super_admin/Users';
-import UserDetail from './super_admin/UserDetail';
-import Registrations from './super_admin/Registrations';
-import StatsStub from './super_admin/StatsStub';
-import CrisisAlerts from '../components/CrisisAlerts';
+import Registrations from './admin_district/Registrations';
+import Chats from './admin_district/Chats';
 
 const TABS = [
-  { to: '/super_admin/admins', label: 'admin 관리' },
-  { to: '/super_admin/registrations', label: '발급번호' },
-  { to: '/super_admin/users', label: '사용자' },
-  { to: '/super_admin/crisis', label: '위기 알림' },
-  { to: '/super_admin/stats', label: '통계' },
+  { to: '/admin_district/registrations', label: '발급번호' },
+  { to: '/admin_district/chats', label: '채팅' },
 ];
 
-export default function SuperAdminDashboard({ profile }) {
+export default function AdminDistrictDashboard({ profile }) {
   const handleLogout = () => supabase.auth.signOut();
 
   return (
     <div className="min-h-screen flex" style={{ backgroundColor: '#FAF7F2' }}>
       <aside className="w-56 bg-white border-r border-stone-200 flex flex-col">
         <div className="px-5 py-5 border-b border-stone-200">
-          <h1 className="font-semibold" style={{ color: '#9B5E45' }}>IMHERE 운영자</h1>
+          <h1 className="font-semibold" style={{ color: '#9B5E45' }}>오롯 자치구 운영자</h1>
           <p className="text-xs text-stone-500 mt-1">
-            {profile.nickname} · super_admin
+            {profile.nickname} · {profile.assigned_gu || '자치구 미지정'}
           </p>
+          {profile.clinical_role && (
+            <p className="text-xs text-stone-400 mt-0.5">{profile.clinical_role}</p>
+          )}
         </div>
 
         <nav className="flex-1 py-4">
@@ -56,14 +52,10 @@ export default function SuperAdminDashboard({ profile }) {
 
       <main className="flex-1 overflow-auto">
         <Routes>
-          <Route index element={<Navigate to="admins" replace />} />
-          <Route path="admins" element={<AdminManagement />} />
-          <Route path="registrations" element={<Registrations />} />
-          <Route path="users" element={<Users />} />
-          <Route path="users/:userId" element={<UserDetail />} />
-          <Route path="crisis" element={<CrisisAlerts profile={profile} isSuperAdmin={true} />} />
-          <Route path="stats" element={<StatsStub />} />
-          <Route path="*" element={<Navigate to="admins" replace />} />
+          <Route index element={<Navigate to="registrations" replace />} />
+          <Route path="registrations" element={<Registrations profile={profile} />} />
+          <Route path="chats" element={<Chats profile={profile} />} />
+          <Route path="*" element={<Navigate to="registrations" replace />} />
         </Routes>
       </main>
     </div>

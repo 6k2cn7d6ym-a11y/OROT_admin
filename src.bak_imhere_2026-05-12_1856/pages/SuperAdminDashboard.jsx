@@ -22,7 +22,7 @@ export default function SuperAdminDashboard({ profile }) {
     <div className="min-h-screen flex" style={{ backgroundColor: '#FAF7F2' }}>
       <aside className="w-56 bg-white border-r border-stone-200 flex flex-col">
         <div className="px-5 py-5 border-b border-stone-200">
-          <h1 className="font-semibold" style={{ color: '#9B5E45' }}>IMHERE 운영자</h1>
+          <h1 className="font-semibold" style={{ color: '#9B5E45' }}>오롯 운영자</h1>
           <p className="text-xs text-stone-500 mt-1">
             {profile.nickname} · super_admin
           </p>

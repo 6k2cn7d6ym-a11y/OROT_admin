@@ -31,7 +31,7 @@ export default function Login() {
       <div className="w-full max-w-sm">
         <div className="text-center mb-8">
           <h1 className="text-2xl font-semibold mb-2" style={{ color: '#9B5E45' }}>
-            IMHERE 운영자
+            오롯 운영자
           </h1>
           <p className="text-sm text-stone-600">로그인</p>
         </div>
