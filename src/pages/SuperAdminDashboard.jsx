@@ -6,11 +6,13 @@ import UserDetail from './super_admin/UserDetail';
 import Registrations from './super_admin/Registrations';
 import StatsStub from './super_admin/StatsStub';
 import CrisisAlerts from '../components/CrisisAlerts';
+import CallLogs from '../components/CallLogs';
 
 const TABS = [
   { to: '/super_admin/admins', label: 'admin 관리' },
   { to: '/super_admin/registrations', label: '발급번호' },
   { to: '/super_admin/users', label: '사용자' },
+  { to: '/super_admin/call_logs', label: '통화 일지' },
   { to: '/super_admin/crisis', label: '위기 알림' },
   { to: '/super_admin/stats', label: '통계' },
 ];
@@ -61,6 +63,7 @@ export default function SuperAdminDashboard({ profile }) {
           <Route path="registrations" element={<Registrations />} />
           <Route path="users" element={<Users />} />
           <Route path="users/:userId" element={<UserDetail />} />
+          <Route path="call_logs" element={<CallLogs profile={profile} isSuperAdmin={true} />} />
           <Route path="crisis" element={<CrisisAlerts profile={profile} isSuperAdmin={true} />} />
           <Route path="stats" element={<StatsStub />} />
           <Route path="*" element={<Navigate to="admins" replace />} />

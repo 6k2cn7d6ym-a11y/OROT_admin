@@ -1,8 +1,10 @@
 import { NavLink, Routes, Route, Navigate } from 'react-router-dom';
 import { supabase } from '../lib/supabase';
 import CrisisAlerts from '../components/CrisisAlerts';
+import CallLogs from '../components/CallLogs';
 
 const TABS = [
+  { to: '/admin_general/call_logs', label: '통화 일지' },
   { to: '/admin_general/crisis', label: '위기 알림' },
 ];
 
@@ -50,10 +52,10 @@ export default function AdminGeneralDashboard({ profile }) {
 
       <main className="flex-1 overflow-auto">
         <Routes>
-          <Route index element={<Navigate to="crisis" replace />} />
-          {/* admin_general은 자치구 무관 동의자 풀 담당이라 자치구 필터 보여줌 (isSuperAdmin=true 활용) */}
+          <Route index element={<Navigate to="call_logs" replace />} />
+          <Route path="call_logs" element={<CallLogs profile={profile} isSuperAdmin={true} />} />
           <Route path="crisis" element={<CrisisAlerts profile={profile} isSuperAdmin={true} />} />
-          <Route path="*" element={<Navigate to="crisis" replace />} />
+          <Route path="*" element={<Navigate to="call_logs" replace />} />
         </Routes>
       </main>
     </div>

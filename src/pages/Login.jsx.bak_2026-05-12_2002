@@ -8,7 +8,6 @@ export default function Login() {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [submitting, setSubmitting] = useState(false);
-  const [oauthLoading, setOauthLoading] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -26,27 +25,6 @@ export default function Login() {
       navigate('/', { replace: true });
     }
   };
-
-  const handleOAuth = async (provider) => {
-    setError('');
-    setOauthLoading(true);
-    try {
-      const { error: err } = await supabase.auth.signInWithOAuth({
-        provider,
-        options: { redirectTo: window.location.origin },
-      });
-      if (err) {
-        setError(err.message);
-        setOauthLoading(false);
-      }
-      // 성공 시 페이지 리디렉션 — loading 상태 유지
-    } catch (e) {
-      setError(e.message || '다시 시도해주세요');
-      setOauthLoading(false);
-    }
-  };
-
-  const anyLoading = submitting || oauthLoading;
 
   return (
     <div className="min-h-screen flex items-center justify-center px-4" style={{ backgroundColor: '#FAF7F2' }}>
@@ -87,42 +65,13 @@ export default function Login() {
 
           <button
             type="submit"
-            disabled={anyLoading}
+            disabled={submitting}
             className="w-full py-2 rounded-md text-white font-medium disabled:opacity-50 transition-opacity"
             style={{ backgroundColor: '#9B5E45' }}
           >
             {submitting ? '로그인 중...' : '로그인'}
           </button>
         </form>
-
-        <div className="flex items-center my-6">
-          <div className="flex-1 h-px bg-stone-300" />
-          <span className="px-3 text-xs text-stone-500">또는</span>
-          <div className="flex-1 h-px bg-stone-300" />
-        </div>
-
-        <div className="space-y-2">
-          <button
-            type="button"
-            onClick={() => handleOAuth('google')}
-            disabled={anyLoading}
-            className="w-full py-2 rounded-md border border-stone-300 bg-white text-stone-800 font-medium disabled:opacity-50 hover:bg-stone-50 transition-colors"
-          >
-            Google로 계속
-          </button>
-          <button
-            type="button"
-            onClick={() => handleOAuth('apple')}
-            disabled={anyLoading}
-            className="w-full py-2 rounded-md bg-black text-white font-medium disabled:opacity-50 hover:bg-stone-900 transition-colors"
-          >
-            Apple로 계속
-          </button>
-        </div>
-
-        <p className="mt-6 text-xs text-center text-stone-500 leading-relaxed">
-          IMHERE 사용자 계정에 한해<br />admin 권한 부여 후 접근 가능해요
-        </p>
       </div>
     </div>
   );

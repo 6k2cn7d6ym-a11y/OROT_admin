@@ -3,10 +3,12 @@ import { supabase } from '../lib/supabase';
 import Registrations from './admin_district/Registrations';
 import Chats from './admin_district/Chats';
 import CrisisAlerts from '../components/CrisisAlerts';
+import CallLogs from '../components/CallLogs';
 
 const TABS = [
   { to: '/admin_district/registrations', label: '발급번호' },
   { to: '/admin_district/chats', label: '채팅' },
+  { to: '/admin_district/call_logs', label: '통화 일지' },
   { to: '/admin_district/crisis', label: '위기 알림' },
 ];
 
@@ -57,6 +59,7 @@ export default function AdminDistrictDashboard({ profile }) {
           <Route index element={<Navigate to="registrations" replace />} />
           <Route path="registrations" element={<Registrations profile={profile} />} />
           <Route path="chats" element={<Chats profile={profile} />} />
+          <Route path="call_logs" element={<CallLogs profile={profile} isSuperAdmin={false} />} />
           <Route path="crisis" element={<CrisisAlerts profile={profile} isSuperAdmin={false} />} />
           <Route path="*" element={<Navigate to="registrations" replace />} />
         </Routes>
